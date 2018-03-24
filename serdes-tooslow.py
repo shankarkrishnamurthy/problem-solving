@@ -54,10 +54,10 @@ class Codec(object):
                 res.append(n.val)
             if not nq or nonNone: break
             q = nq
-       if res:
-           while res[-1] == None:
-              res.pop()
-              if not res: break
+        if res:
+            while res[-1] == None:
+               res.pop()
+               if not res: break
         return repr(res)
 
     def deserialize(self, data):
