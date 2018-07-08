@@ -37,7 +37,7 @@ class Codec(object):
         :type root: TreeNode
         :rtype: str
         """
-        print "Serialize: ", root
+        #print "Serialize: ", root
         res=[]
         q = [root]
         while q:
@@ -66,7 +66,7 @@ class Codec(object):
         :type data: str
         :rtype: TreeNode
         """
-        print "Deserialize: ", data
+        #print "Deserialize: ", data
         a = eval(data)
         if not len(a): return None
         root = None
