@@ -1,4 +1,13 @@
 import bisect
+import time
+def timeit(fn):
+    def wrapper(*arg):
+        st = time.clock()       
+        ret = fn(*arg)
+        print "Time Taken " ,time.clock() - st
+        return ret
+    return wrapper
+
 class Solution(object):
     def countPairsLTE(self, array, value):
         ans = 0
@@ -14,6 +23,7 @@ class Solution(object):
             ans += j -i -1
         return ans
     """
+    @timeit
     def smallestDistancePair(self, nums, k):
         """
         :type nums: List[int]
