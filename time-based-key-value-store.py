@@ -18,7 +18,6 @@ class TimeMap(object):
             self.kv[k][1].setdefault(t, v)
         else:
             self.kv[k]=([t],{t:v})
-        #print self.kv
 
     def get(self, k, t):
         """
@@ -27,15 +26,15 @@ class TimeMap(object):
         :rtype: str
         """
         if k not in self.kv: return ""
-        i = bisect_left(self.kv[k][0], t)
-        #print '\nindx ', i,
-        if i >= len(self.kv[k][0]): ts = self.kv[k][0][-1]
-        elif t == self.kv[k][0][i]: ts = t
+        tl,th = self.kv[k]
+        i = bisect_left(tl, t)
+        if t >= tl[-1]: ts = tl[-1]
+        elif t == tl[i]: ts = t
         else:
-            if i> 0: ts = self.kv[k][0][i-1]
-            else:return ""
+            if i>0: ts = tl[i-1]
+            else: return ""
             
-        return self.kv[k][1][ts]
+        return th[ts]
         
 
 # Your TimeMap object will be instantiated and called as such:
