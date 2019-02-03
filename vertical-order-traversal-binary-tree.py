@@ -22,21 +22,14 @@ class Solution(object):
         for k in sorted(ha):
             res.append([x[1] for x in sorted(ha[k])])
         return res
+
         
-t = TreeNode(1)
-t.left = TreeNode(2)
-t.right = TreeNode(3)
-t.left.left = TreeNode(4)
-t.left.right = TreeNode(5)
-t.right.left = TreeNode(6)
-t.right.right = TreeNode(7)
+from library_for_lc import *
+t = deser([1,2,3,4,5,6,7])
 print Solution().verticalTraversal(t)
  
-t = TreeNode(3)
-t.left = TreeNode(9)
-t.right = TreeNode(20)
-t.right.left = TreeNode(15)
-t.right.right = TreeNode(7)
+t = deser([3,9,20,null,null,15,7])
 print Solution().verticalTraversal(t)
 t = TreeNode(3)
+t = deser([3])
 print Solution().verticalTraversal(t)

@@ -28,28 +28,37 @@ class Solution(object):
         dfs(root,[])
         return min(res)
 
-t = TreeNode(25)
-t.left = TreeNode(1)
-t.right = TreeNode(3)
-t.left.left = TreeNode(1)
-t.left.right = TreeNode(3)
-t.right.left = TreeNode(0)
-t.right.right = TreeNode(2)
+def deser(tl):
+    p,c = 0,1
+    if not tl: return None
+    tl[p] = TreeNode(tl[p])
+    while p < len(tl):
+        if tl[p] == None: 
+            p+=1
+            continue
+        if c >= len(tl): 
+            p+=1
+            continue
+        if tl[c] != None: tl[c] = TreeNode(tl[c])
+        tl[p].left = tl[c]
+        c+=1
+        if c >= len(tl): 
+            p+=1
+            continue
+        if tl[c] != None: tl[c] = TreeNode(tl[c])
+        tl[p].right = tl[c]
+        c+=1
+        p+=1
+    return tl[0]
+
+null = None
+t = deser([25,1,3,1,3,0,2])
 print Solution().smallestFromLeaf(t)
-t = TreeNode(0)
-t.left = TreeNode(1)
-t.right = TreeNode(2)
-t.left.left = TreeNode(3)
-t.left.right = TreeNode(4)
-t.right.left = TreeNode(3)
-t.right.right = TreeNode(4)
+t = deser([0,1,2,3,4,3,4])
 print Solution().smallestFromLeaf(t)
-t = TreeNode(2)
-t.left = TreeNode(2)
-t.right = TreeNode(1)
-t.left.right = TreeNode(1)
-t.left.right.left = TreeNode(0)
-t.right.left = TreeNode(0)
+t = deser([2,2,1,null,1,0,null,0])
 print Solution().smallestFromLeaf(t)
-t = TreeNode(2)
+t = deser([2])
 print Solution().smallestFromLeaf(t)
+
+
