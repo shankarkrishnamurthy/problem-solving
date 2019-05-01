@@ -1,5 +1,13 @@
 import sys
 from SameTree import *
+import time
+def timeit(fn):
+    def wrapper(*arg):
+        st = time.clock()       
+        ret = fn(*arg)
+        print "Time Taken " ,time.clock() - st
+        return ret
+    return wrapper
 null=None
 class TreeNode(object):
     def __init__(self, x):
