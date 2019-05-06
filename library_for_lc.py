@@ -9,6 +9,22 @@ def timeit(fn):
         return ret
     return wrapper
 null=None
+
+class ListNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+def arr2ll(a):
+    head = tail = None
+    for i in a:
+        l = ListNode(i)
+        if not head:
+            head = tail = l
+        else:
+            tail.next = l
+            tail = tail.next
+    return head
+
 class TreeNode(object):
     def __init__(self, x):
         self.val = x
