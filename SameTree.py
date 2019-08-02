@@ -27,4 +27,4 @@ if __name__ == "__main__":
     t1.right.left = TreeNode(4)
     t2 = TreeNode(1)
     t2.left = TreeNode(2)
-    print SameTree().isSameTree(t1,t2)
+    print(SameTree().isSameTree(t1,t2))

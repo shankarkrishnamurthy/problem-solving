@@ -5,7 +5,7 @@ def timeit(fn):
     def wrapper(*arg):
         st = time.clock()       
         ret = fn(*arg)
-        print "Time Taken " ,time.clock() - st
+        print("Time Taken " ,time.clock() - st)
         return ret
     return wrapper
 null=None
@@ -68,14 +68,14 @@ def ser(bt):
     return res
 
 def call(**kwargs):
-    print '-------------'
+    print('-------------')
     i = 1
     for f,v in zip(kwargs["inp"],kwargs["arg"]):
         if i:
             o = getattr(sys.modules['__main__'], f)()
             i = 0
-        else: print f, v, 'Ans:', getattr(o, f)(*v)
-    print '-------------'
+        else: print (f, v, 'Ans:', getattr(o, f)(*v))
+    print ('-------------')
 
 """ EXAMPLE
 t = TreeNode(5)
