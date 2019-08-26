@@ -72,7 +72,7 @@ def call(**kwargs):
     i = 1
     for f,v in zip(kwargs["inp"],kwargs["arg"]):
         if i:
-            o = getattr(sys.modules['__main__'], f)()
+            o = getattr(sys.modules['__main__'], f)(*v)
             i = 0
         else: print (f, v, 'Ans:', getattr(o, f)(*v))
     print ('-------------')
