@@ -14,6 +14,12 @@ class ListNode(object):
     def __init__(self, x):
         self.val = x
         self.next = None
+def prll(h):
+    a = []
+    while h:
+        a.append(h.val)
+        h = h.next
+    return a
 def arr2ll(a):
     head = tail = None
     for i in a:
