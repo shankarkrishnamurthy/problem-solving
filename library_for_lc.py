@@ -130,10 +130,10 @@ class UnionFind:
             self.parent_pointers[on2] = on1
     def __str__(self):
         sets = {}
-        for i in xrange(len(self.objects_to_num)): sets[i] = []
+        for i in range(len(self.objects_to_num)): sets[i] = []
         for i in self.objects_to_num: sets[self.objects_to_num[self.find(i)]].append(i)
         out = []
-        for i in sets.itervalues(): 
+        for i in sets.values(): 
             if i: out.append(repr(i))
         return ', '.join(out)
 
