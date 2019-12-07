@@ -133,7 +133,14 @@ class UnionFind:
         for i in range(len(self.objects_to_num)): sets[i] = []
         for i in self.objects_to_num: sets[self.objects_to_num[self.find(i)]].append(i)
         out = []
+        print (self.objects_to_num, sets)
         for i in sets.values(): 
             if i: out.append(repr(i))
         return ', '.join(out)
+    def get(self):
+        sets = {}
+        for i in range(len(self.objects_to_num)): sets[i] = []
+        for i in self.objects_to_num: sets[self.objects_to_num[self.find(i)]].append(i)
+        return [x for x in sets.values() if x]
+        
 
