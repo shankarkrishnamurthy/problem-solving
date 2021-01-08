@@ -1,3 +1,4 @@
+#!/bin/env python
 class Solution(object):
     def eventualSafeNodes(self, g):
         """
