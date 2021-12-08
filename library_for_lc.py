@@ -36,6 +36,7 @@ class TreeNode(object):
         self.val = x
         self.left = None
         self.right = None
+        self.next = None
 def deser(tl):
     p,c = 0,1
     if not tl: return None
