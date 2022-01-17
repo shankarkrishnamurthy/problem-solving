@@ -143,5 +143,11 @@ class UnionFind:
         for i in range(len(self.objects_to_num)): sets[i] = []
         for i in self.objects_to_num: sets[self.objects_to_num[self.find(i)]].append(i)
         return [x for x in sets.values() if x]
+    def getlist(self, obj):
+        sets, o = [], self.find(obj)
+        for i in self.objects_to_num:
+            if self.find(i) == o: sets.append(i)
+        return sets
+
         
 
