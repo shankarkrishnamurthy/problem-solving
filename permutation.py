@@ -1,10 +1,9 @@
 def do_permute(prim, e):
     nlist = []
     for i in prim:
+        tmp = list(i)
         for j in range(0,len(i)+1):
-            tmp = list(i)
-            tmp.insert(j, e)
-            nlist += [tmp]
+            nlist.append(tmp[:j]+[e]+tmp[j:])
     return nlist
     
 def permute(nums):
@@ -20,7 +19,7 @@ def permute(nums):
         l1 = do_permute(l1, e)
     return l1
 
-print permute([1])
-print permute([1,2])
-print permute([1,2,3])
-#print permute([1,2,3,4,5])
+#print(permute([1]))
+#print(permute([1,2]))
+#print(permute([1,2,3]))
+print(permute([1,2,3,4,5]))
