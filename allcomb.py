@@ -21,7 +21,7 @@ class Solution(object):
             c += [i + [e]]
         self.l += c
 
-    def subsets(self, nums):
+    def subsets1(self, nums):
         """
         :type nums: List[int]
         :rtype: List[List[int]]
@@ -30,7 +30,19 @@ class Solution(object):
             self.do_subsets(e)
         return self.l
         
-print Solution().subsets([])
-print Solution().subsets([1])
-print Solution().subsets([1,2])
-print Solution().subsets([1,2,3])
+    def subsets(self, nums):
+        res, cur, n = [], [], len(nums)
+        def dfs(i):
+            if i >=n: 
+                res.append(cur[:])
+                return
+            cur.append(nums[i])
+            dfs(i+1)
+            cur.pop()
+            dfs(i+1)
+        dfs(0)
+        return res
+print(Solution().subsets([]))
+print(Solution().subsets([1]))
+print(Solution().subsets([1,2]))
+print(Solution().subsets([1,2,3]))

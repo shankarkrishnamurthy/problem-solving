@@ -129,6 +129,10 @@ class UnionFind:
             self.num_weights[on1] = w1+w2
             del self.num_weights[on2]
             self.parent_pointers[on2] = on1
+    def group_size(self, object1):
+        o1p =  self.find(object1)
+        on1 = self.objects_to_num[o1p]
+        return self.num_weights[on1]
     def __str__(self):
         sets = {}
         for i in range(len(self.objects_to_num)): sets[i] = []
@@ -148,6 +152,36 @@ class UnionFind:
         for i in self.objects_to_num:
             if self.find(i) == o: sets.append(i)
         return sets
-
-        
-
+class Trie:
+    def __init__(o, w=[]):
+        o.r = {}
+        for i in w: o.create(i)
+    def create(o, w):
+        #print("create " , w)
+        cr = o.r
+        for c in w:
+            cr[c] = cr.setdefault(c, {})
+            cr[c]['P'] = cr
+            cr = cr[c]
+        cr['#'] = None
+    def delete(o, w):
+        #print("delete " , w)
+        cr,i  = o.r, len(w)-1
+        for c in w:
+            if c in cr: cr = cr[c]
+            else: return 
+        if '#' not in cr: return
+        del cr['#']
+        while 'P' in cr:
+            cr = cr['P']
+            if len(cr[w[i]]) > 1: break
+            del cr[w[i]]
+            i -= 1
+    def check(o, w):
+        #print("check " , w)
+        cr = o.r
+        for c in w:
+            if c in cr: cr = cr[c]
+            else: return False
+        if '#' not in cr: return False
+        return True
