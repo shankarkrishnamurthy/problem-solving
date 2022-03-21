@@ -3,9 +3,9 @@ from SameTree import *
 import time
 def timeit(fn):
     def wrapper(*arg):
-        st = time.clock()       
+        st = time.time()       
         ret = fn(*arg)
-        print("Time Taken " ,time.clock() - st)
+        print("Time Taken " ,time.time() - st)
         return ret
     return wrapper
 null=None
