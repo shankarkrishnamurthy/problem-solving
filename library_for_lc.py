@@ -185,3 +185,58 @@ class Trie:
             else: return False
         if '#' not in cr: return False
         return True
+
+defmax,defmin=0,float("inf") 
+# for sum query, uncomment line in query
+# replace max -> min below this line
+# .,$s/max/min/g
+class Node():
+    def __init__(o,be,en):
+        o.l, o.r = be, en
+        o.le, o.ri = None, None
+        o.su, o.ma = 0, defmax
+    def __str__(o):
+        return "[%s sum %d max %d]" % ((o.l,o.r), o.su, o.ma)
+        
+class SegmentTree():
+    def __init__(o, l, r, val):
+        def build(l,r):
+            if l == r:
+                n = Node(l,r)
+                n.su, n.ma = val, val
+                return n
+            n, m = Node(l,r), (l+r)//2
+            n.le, n.ri = build(l,m), build(m+1,r)
+            n.su, n.ma = n.le.su + n.ri.su, max(n.le.ma, n.ri.ma)
+            return n
+        o.r = build(l,r)
+
+    def query(o, l, r):
+        def q(n, f, fn):
+            if l > n.r or r < n.l: return defmax
+            if l <= n.l and r >= n.r:
+                return getattr(n, f)
+            a, b = q(n.le, f, fn), q(n.ri, f, fn)
+            return fn(a,b)
+        #return q(o.r, 'su', lambda x,y: x+y)
+        return q(o.r, 'ma', lambda x,y: max(x,y))
+
+    def update(o, ind, val):
+        def u(n):
+            l, r = n.l, n.r
+            if l == r == ind:
+                n.su, n.ma = val, val
+                return
+            m = (l+r)//2
+            if ind <= m: u(n.le)
+            else: u(n.ri)
+            n.su, n.ma = n.le.su + n.ri.su, max(n.le.ma,n.ri.ma)
+            return
+        u(o.r)
+        return
+""" EXAMPLE
+    st = SegmentTree(0,9,5)
+    v1=st.query(3,7)
+    st.update(5,6)
+    v2=st.query(3,7)
+"""
