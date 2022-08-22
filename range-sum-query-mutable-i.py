@@ -21,11 +21,10 @@ class NumArray:
 
     def update(o, index, val):
         o._update(index+1, val)
+        print(o.bit)
                 
     def sumRange(o, l, r):
-        print(o.bit)
         return o._query(r+1) - o._query(l)
-
 
 obj = NumArray([1,2,3])
 print(obj.sumRange(1,2))
