@@ -250,10 +250,8 @@ class SegmentTree():
         self.n = n
         self.tree = [0] * 2 * self.n
        
-    def query(self, l, r):
-        l += self.n
-        r += self.n
-        ans = 0
+    def query(self, l, r): # Queries in range [l,r)
+        l, r, ans = l+self.n, r+self.n, 0
         while l < r:
             if l & 1:
                 ans = max(ans, self.tree[l])
@@ -261,8 +259,7 @@ class SegmentTree():
             if r & 1:
                 r -= 1
                 ans = max(ans, self.tree[r])
-            l >>= 1
-            r >>= 1
+            l, r = l>>1, r>>1
         return ans
     
     def update(self, i, val):
@@ -272,8 +269,43 @@ class SegmentTree():
             i >>= 1
             self.tree[i] = max(self.tree[i * 2], self.tree[i * 2 + 1])
 """ EXAMPLE
-    st = SegmentTree(0,9,5)
+    st = SegmentTree(13)
     v1=st.query(3,7)
     st.update(5,6)
     v2=st.query(3,7)
 """
+#Fenwick Tree or BIT 
+class FenwickTree:
+    def _update(o, i, v):
+        diff = v - (o._query(i) - o._query(i-1))
+        while i < len(o.bit):
+            o.bit[i] += diff
+            i += i & -i
+
+    def _query(o, i):
+        if i == 0: return 0
+        s = 0
+        while i:
+            s += o.bit[i]
+            i -= i & -i
+        return s 
+
+    def __init__(o, nums):
+        o.bit = [0]*(len(nums)+1)
+        for i in range(len(nums)): o._update(i+1, nums[i])
+
+    def update(o, index, val):
+        o._update(index+1, val)
+                
+    def sumRange(o, l, r):
+        return o._query(r+1) - o._query(l)
+"""
+obj = FenwickTree([1,2,3])
+print(obj.sumRange(1,2))
+obj.update(1,5)
+print(obj.sumRange(1,2))
+
+
+"""
+
+
