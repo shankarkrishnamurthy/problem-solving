@@ -154,13 +154,13 @@ class UnionFind:
         return sets
 class SimpleUnionFind():
     def __init__(o, N):
-        o.p = list(range(N))
-        o.w = [1]*N
+        o.p,o.w = list(range(N)), [1]*N
     def find(o, x):
         while o.p[x] != x: x = o.p[x]
         return x
     def union(o,a,b):
         x,y = o.find(a), o.find(b)
+        if x==y: return
         if o.w[x] < o.w[y]: x,y = y, x
         o.p[y], o.w[x] = x, o.w[x]+o.w[y]
 class Trie:
@@ -245,29 +245,31 @@ class ArcaneSegmentTree():
             return
         u(o.r)
         return
+OP=lambda a,b: a+b
+#OP=lambda a,b: max(a,b)
 class SegmentTree():
     def __init__(self, n):
         self.n = n
         self.tree = [0] * 2 * self.n
        
-    def query(self, l, r): # Queries in range [l,r)
+    def query(self, l, r):                  # Queries in range [l,r)
         l, r, ans = l+self.n, r+self.n, 0
         while l < r:
             if l & 1:
-                ans = max(ans, self.tree[l])
+                ans = OP(ans, self.tree[l])
                 l += 1
             if r & 1:
                 r -= 1
-                ans = max(ans, self.tree[r])
+                ans = OP(ans, self.tree[r])
             l, r = l>>1, r>>1
         return ans
     
-    def update(self, i, val):
-        i += self.n
-        self.tree[i] = val
+    def update(o, i, val):
+        i += o.n
+        o.tree[i] = val
         while i > 1:
             i >>= 1
-            self.tree[i] = max(self.tree[i * 2], self.tree[i * 2 + 1])
+            o.tree[i]=OP(o.tree[i*2], o.tree[i*2+1])
 """ EXAMPLE
     st = SegmentTree(13)
     v1=st.query(3,7)
