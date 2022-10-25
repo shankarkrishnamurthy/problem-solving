@@ -154,13 +154,13 @@ class UnionFind:
         return sets
 class SimpleUnionFind():
     def __init__(o, N):
-        o.p = list(range(N))
-        o.w = [1]*N
+        o.p,o.w = list(range(N)), [1]*N
     def find(o, x):
         while o.p[x] != x: x = o.p[x]
         return x
     def union(o,a,b):
         x,y = o.find(a), o.find(b)
+        if x==y: return
         if o.w[x] < o.w[y]: x,y = y, x
         o.p[y], o.w[x] = x, o.w[x]+o.w[y]
 class Trie:
@@ -209,7 +209,7 @@ class Node():
     def __str__(o):
         return "[%s sum %d max %d]" % ((o.l,o.r), o.su, o.ma)
         
-class SegmentTree():
+class ArcaneSegmentTree():
     def __init__(o, l, r, val):
         def build(l,r):
             if l == r:
@@ -245,9 +245,69 @@ class SegmentTree():
             return
         u(o.r)
         return
+OP=lambda a,b: a+b
+#OP=lambda a,b: max(a,b)
+class SegmentTree():
+    def __init__(self, n):
+        self.n = n
+        self.tree = [0] * 2 * self.n
+       
+    def query(self, l, r):                  # Queries in range [l,r)
+        l, r, ans = l+self.n, r+self.n, 0
+        while l < r:
+            if l & 1:
+                ans = OP(ans, self.tree[l])
+                l += 1
+            if r & 1:
+                r -= 1
+                ans = OP(ans, self.tree[r])
+            l, r = l>>1, r>>1
+        return ans
+    
+    def update(o, i, val):
+        i += o.n
+        o.tree[i] = val
+        while i > 1:
+            i >>= 1
+            o.tree[i]=OP(o.tree[i*2], o.tree[i*2+1])
 """ EXAMPLE
-    st = SegmentTree(0,9,5)
+    st = SegmentTree(13)
     v1=st.query(3,7)
     st.update(5,6)
     v2=st.query(3,7)
 """
+#Fenwick Tree or BIT 
+class FenwickTree:
+    def _update(o, i, v):
+        diff = v - (o._query(i) - o._query(i-1))
+        while i < len(o.bit):
+            o.bit[i] += diff
+            i += i & -i
+
+    def _query(o, i):
+        if i == 0: return 0
+        s = 0
+        while i:
+            s += o.bit[i]
+            i -= i & -i
+        return s 
+
+    def __init__(o, nums):
+        o.bit = [0]*(len(nums)+1)
+        for i in range(len(nums)): o._update(i+1, nums[i])
+
+    def update(o, index, val):
+        o._update(index+1, val)
+                
+    def sumRange(o, l, r):
+        return o._query(r+1) - o._query(l)
+"""
+obj = FenwickTree([1,2,3])
+print(obj.sumRange(1,2))
+obj.update(1,5)
+print(obj.sumRange(1,2))
+
+
+"""
+
+
