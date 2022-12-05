@@ -3,11 +3,7 @@ import mmh3
 from bitarray import bitarray
 
 class BloomFilter(object):
-
-    '''
-    Class for Bloom filter, using murmur3 hash function
-    '''
-
+    #Class for Bloom filter, using murmur3 hash function
     def __init__(self, items_count, fp_prob):
         '''
         items_count : int
@@ -15,21 +11,12 @@ class BloomFilter(object):
         fp_prob : float
             False Positive probability in decimal
         '''
-        # False possible probability in decimal
-        self.fp_prob = fp_prob
-
-        # Size of bit array to use
-        self.size = self.get_size(items_count, fp_prob)
-
-        # number of hash functions to use
-        self.hash_count = self.get_hash_count(self.size, items_count)
-
-        # Bit array of given size
-        self.bit_array = bitarray(self.size)
-
-        # initialize all bits as 0
-        self.bit_array.setall(0)
-        print("n %d p %f m %d k %d" %(items_count, fp_prob, self.size, self.hash_count))
+        self.fp_prob = fp_prob # False possible probability in decimal
+        self.size = self.get_size(items_count, fp_prob) # Size of bit array
+        self.hash_count = self.get_hash_count(self.size, items_count) # no. of hash fn()
+        self.bit_array = bitarray(self.size) # Bit array of given size
+        self.bit_array.setall(0) # initialize all bits as 0
+        print("n %d p %f bit array sz %d hash count %d" %(items_count, fp_prob, self.size, self.hash_count))
 
     def add(self, item):
         '''
