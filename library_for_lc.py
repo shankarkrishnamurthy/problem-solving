@@ -306,8 +306,48 @@ obj = FenwickTree([1,2,3])
 print(obj.sumRange(1,2))
 obj.update(1,5)
 print(obj.sumRange(1,2))
-
-
 """
-
-
+class LazySegmentTree:
+    def __init__(o, n): o.n, o.tree, o.lazy = n, [0]*(4*n), [0]*(4*n)
+    def _pushdown(o, v, lo, hi):
+        if o.lazy[v]:
+            o.tree[v] += (hi - lo + 1) * o.lazy[v]
+            if lo < hi:
+                o.lazy[2*v + 1] += o.lazy[v]
+                o.lazy[2*v + 2] += o.lazy[v]
+            o.lazy[v] = 0
+    def build(o, arr, v, lo, hi):
+        if lo == hi:
+            o.tree[v] = arr[lo]
+            return
+        m = (lo + hi)//2
+        o.build(arr, 2*v + 1, lo, m)
+        o.build(arr, 2*v + 2, m + 1, hi)
+        o.tree[v] = o.tree[2*v + 1] + o.tree[2*v + 2]
+    def update(o, v, lo, hi, i, j, val):
+        o._pushdown(v, lo, hi)
+        if lo > j or hi < i: return 
+        if i <= lo and hi <= j: 
+            o.lazy[v] = val
+            return
+        m = (lo + hi)//2
+        o.update(2*v + 1, lo, m, i, j, val) 
+        o.update(2*v + 2, m+1, hi, i, j, val)
+        o.tree[v] = o.tree[2*v + 1] + o.tree[2*v + 2]
+    def query(o, v, lo, hi, i, j):
+        o._pushdown(v, lo, hi)
+        if j < lo or hi < i: return 0
+        if i <= lo and hi <= j: return o.tree[v]
+        m = (lo + hi)//2
+        if i > m: return o.query(2*v + 2, m + 1, hi, i, j)
+        elif j <= m: return o.query(2*v + 1, lo, m, i, j)
+        return o.query(2*v + 1, lo, m, i, m) + o.query(2*v + 2, m+1, hi, m+1, j)
+"""
+    mx, lst = 10,LazySegmentTree(10)
+    arr = [random.randint(1,100) for i in range(mx)]
+    lst.build(arr, 0, 0, mx-1)
+    print('arr', arr)
+    lst.update(0,0,mx-1,2,8,2)
+    lst.update(0,0,mx-1,5,7,3)
+    print('q2', [3, 7], lst.query(0,0,mx-1,3,8))o
+"""
