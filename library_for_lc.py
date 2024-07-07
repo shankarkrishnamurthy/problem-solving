@@ -282,31 +282,21 @@ class SegmentTree():
     v2=st.query(3,7)
 """
 #Fenwick Tree or BIT 
+#OP=lambda a,b: a+b
+OP=lambda a,b: max(a,b)
 class FenwickTree:
-    def _update(o, i, v):
-        diff = v - (o._query(i) - o._query(i-1))
+    def update(o, i, v):
+        i+=1
         while i < len(o.bit):
-            o.bit[i] += diff
+            o.bit[i] = OP(o.bit[i], v)
             i += i & -i
-
-    def _query(o, i):
-        if i == 0: return 0
-        s = 0
+    def query(o, i):
+        i, s = i+1, 0
         while i:
-            s += o.bit[i]
+            s = OP(s, o.bit[i])
             i -= i & -i
-        return s 
-
-    def __init__(o, nums):
-        o.bit = [0]*(len(nums)+1)
-        for i in range(len(nums)): o._update(i+1, nums[i])
-
-    def update(o, index, val):
-        o._update(index+1, val)
-                
-    def sumRange(o, l, r):
-        return o._query(r+1) - o._query(l)
-"""
+        return s
+    def __init__(o, n): o.bit = [0]*(n+1)
 obj = FenwickTree([1,2,3])
 print(obj.sumRange(1,2))
 obj.update(1,5)
