@@ -163,6 +163,11 @@ class SimpleUnionFind():
         if x==y: return
         if o.w[x] < o.w[y]: x,y = y, x
         o.p[y], o.w[x] = x, o.w[x]+o.w[y]
+trie = lambda: defaultdict(trie)
+root = trie()
+(or)
+root =  (T := lambda: defaultdict(T))() # oneliner
+#r['a'][1] = (1,2)
 class Trie:
     def __init__(o, w=[]):
         o.r = {}
