@@ -282,7 +282,7 @@ class SegmentTree():
     v2=st.query(3,7)
 """
 # Segment Tree with left index anchored at 0
-class SegTree:
+class SegTreeOneLeg:
     def __init__(self, n: int):
         self.n = 1 << n.bit_length()
         self.tree = [0] * (self.n*2)
@@ -365,3 +365,16 @@ class LazySegmentTree:
     lst.update(0,0,mx-1,5,7,3)
     print('q2', [3, 7], lst.query(0,0,mx-1,3,8))o
 """
+def calculate_z_array(self, s: str) -> list[int]:
+    length = len(s)
+    z = [0] * length
+    left, right = 0, 0
+    for i in range(1, length):
+        if i < right:
+            z[i] = min(right - i, z[i - left])
+        while i + z[i] < length and s[z[i]] == s[i + z[i]]:
+            z[i] += 1
+        if i + z[i] > right:
+            left = i
+            right = i + z[i]
+    return z
