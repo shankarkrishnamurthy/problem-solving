@@ -250,9 +250,10 @@ class ArcaneSegmentTree():
             return
         u(o.r)
         return
+
 OP=lambda a,b: a+b
 #OP=lambda a,b: max(a,b)
-class SegmentTree():
+class SegmentTree(): # Used for point update
     def __init__(self, n):
         self.n = n
         self.tree = [0] * 2 * self.n
@@ -281,6 +282,7 @@ class SegmentTree():
     st.update(5,6)
     v2=st.query(3,7)
 """
+
 # Segment Tree with left index anchored at 0
 class SegTreeOneLeg:
     def __init__(self, n: int):
@@ -300,6 +302,7 @@ class SegTreeOneLeg:
                 res = max(res, self.tree[ind-1])
             ind //= 2
         return res
+
 #Fenwick Tree or BIT 
 #OP=lambda a,b: a+b
 OP=lambda a,b: max(a,b)
@@ -320,8 +323,8 @@ obj = FenwickTree([1,2,3])
 print(obj.sumRange(1,2))
 obj.update(1,5)
 print(obj.sumRange(1,2))
-"""
-class LazySegmentTree:
+
+class LazySegmentTree: # Used for Range update
     def __init__(o, n): o.n, o.tree, o.lazy = n, [0]*(4*n), [0]*(4*n)
     def _pushdown(o, v, lo, hi):
         if o.lazy[v]:
@@ -356,7 +359,6 @@ class LazySegmentTree:
         if i > m: return o.query(2*v + 2, m + 1, hi, i, j)
         elif j <= m: return o.query(2*v + 1, lo, m, i, j)
         return o.query(2*v + 1, lo, m, i, m) + o.query(2*v + 2, m+1, hi, m+1, j)
-"""
     mx, lst = 10,LazySegmentTree(10)
     arr = [random.randint(1,100) for i in range(mx)]
     lst.build(arr, 0, 0, mx-1)
@@ -364,8 +366,32 @@ class LazySegmentTree:
     lst.update(0,0,mx-1,2,8,2)
     lst.update(0,0,mx-1,5,7,3)
     print('q2', [3, 7], lst.query(0,0,mx-1,3,8))o
-"""
-def calculate_z_array(self, s: str) -> list[int]:
+
+class SegmentTree: # Range update + Diff array + overlap counted once + coordinate compression
+    def __init__(self, xs: List[int]):
+        self.xs = xs # sorted x coordinates
+        self.n = len(xs) - 1
+        self.count = [0] * (4 * self.n)
+        self.covered = [0] * (4 * self.n)
+    
+    def update(self, qleft, qright, qval, left, right, pos):
+        if self.xs[right+1] <= qleft or self.xs[left] >= qright: # no overlap
+            return
+        if qleft <= self.xs[left] and self.xs[right+1] <= qright: # full overlap
+            self.count[pos] += qval
+        else:
+            mid = (left + right) // 2
+            self.update(qleft, qright, qval, left, mid, pos*2 + 1)
+            self.update(qleft, qright, qval, mid+1, right, pos*2 + 2)
+
+        if self.count[pos] > 0: self.covered[pos] = self.xs[right+1] - self.xs[left]
+        else:
+            if left == right: self.covered[pos] = 0
+            else: self.covered[pos] = self.covered[pos*2 + 1] + self.covered[pos*2 + 2]
+    
+    def query(self): return self.covered[0]
+
+def calculate_z_array(self, s: str) -> list[int]: # Z function
     length = len(s)
     z = [0] * length
     left, right = 0, 0
@@ -378,3 +404,16 @@ def calculate_z_array(self, s: str) -> list[int]:
             left = i
             right = i + z[i]
     return z
+
+def lps(s): # KMP
+    n = len(s)
+    lps = [0] * n
+    j = 0
+    for i in range(1, n):
+        while j and s[i] != s[j]:
+            j = lps[j-1]
+        if s[i] == s[j]:
+            j += 1
+            lps[i] = j
+return lps
+
