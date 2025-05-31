@@ -359,13 +359,13 @@ class LazySegmentTree: # Used for Range update
         if i > m: return o.query(2*v + 2, m + 1, hi, i, j)
         elif j <= m: return o.query(2*v + 1, lo, m, i, j)
         return o.query(2*v + 1, lo, m, i, m) + o.query(2*v + 2, m+1, hi, m+1, j)
-    mx, lst = 10,LazySegmentTree(10)
-    arr = [random.randint(1,100) for i in range(mx)]
-    lst.build(arr, 0, 0, mx-1)
-    print('arr', arr)
-    lst.update(0,0,mx-1,2,8,2)
-    lst.update(0,0,mx-1,5,7,3)
-    print('q2', [3, 7], lst.query(0,0,mx-1,3,8))o
+mx, lst = 10,LazySegmentTree(10)
+arr = [random.randint(1,100) for i in range(mx)]
+lst.build(arr, 0, 0, mx-1)
+print('arr', arr)
+lst.update(0,0,mx-1,2,8,2)
+lst.update(0,0,mx-1,5,7,3)
+print('q2', [3, 7], lst.query(0,0,mx-1,3,8))o
 
 class SegmentTree: # Range update + Diff array + overlap counted once + coordinate compression
     def __init__(self, xs: List[int]):
@@ -417,3 +417,63 @@ def lps(s): # KMP
             lps[i] = j
 return lps
 
+def factorial_mod(n, p):
+    fact = [1]*(n+1)
+    for i in range(2, n+1): fact[i] = (fact[i-1] * i) % p
+    return fact
+
+def factinv_mod(n, p):
+    factinv, fact = [1]*(n+1), factorial_mod(n, p)
+    for i in range(1,n+1): factinv[i] = pow(fact[i], p-2, p)
+    return factinv
+
+def nCr(n, r, p):
+    fact, factinv = factorial_mod(n, p), factinv_mod(n, p)
+    return (fact[n] * factinv[r] * factinv[n-r]) % p
+
+def lucas_theorem(n: int, k: int, p: int): # see https://en.wikipedia.org/wiki/Lucas%27s_theorem
+    product = 1
+    while n != 0 or k != 0:
+        n_dig = n % p
+        k_dig = k % p
+        if k_dig > n_dig: return 0
+        product *= math.comb(n_dig, k_dig) # for small enough numbers
+        product %= p
+        n //= p
+        k //= p
+    return product
+
+def Hierholzer(adj): # Function to print Eulerian circuit
+    if len(adj) == 0: return []
+    circuit, currPath = [], [0]
+    while len(currPath) > 0:
+        currNode = currPath[-1]
+        if len(adj[currNode]) > 0:
+            nextNode = adj[currNode].pop()
+            currPath.append(nextNode)
+        else: circuit.append(currPath.pop())
+    return circuit[::-1]
+adj = [[2, 3], [0], [1], [4], [0]]
+ans = Hierholzer(adj)
+for v in ans: print(v, end=" ")
+
+#LOG = (n).bit_length()     # Binary Lifting
+#parent  = [[0]*(n+1) for _ in range(LOG)]
+#   using DFS/BFS parent[0][child] = parent
+#for k in range(1, LOG):
+    #for v in range(1, n+1):
+        #parent[k][v] = parent[k-1][parent[k-1][v]]
+def lca(u, v): # ancestory using binary lifting
+    if depth[u] < depth[v]:
+        u, v = v, u
+    diff = depth[u] - depth[v]
+    for k in range(LOG):
+        if diff >> k & 1:
+            u = parent[k][u]
+    if u == v:
+        return u
+    for k in reversed(range(LOG)):
+        if parent[k][u] != parent[k][v]:
+            u = parent[k][u]
+            v = parent[k][v]
+    return parent[0][u]
